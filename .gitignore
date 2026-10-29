@@ -1,0 +1,31 @@
+# macOS
+.DS_Store
+
+# Python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.coverage
+htmlcov/
+
+# Local configuration and generated runs
+.env
+.env.*
+!.env.example
+outputs/
+work/
+
+# HyperFrames video project
+promo-structsynth/AGENTS.md
+promo-structsynth/CLAUDE.md
+promo-structsynth/capture/
+promo-structsynth/node_modules/
+promo-structsynth/.hyperframes/
+promo-structsynth/.hyperframes-state/
+promo-structsynth/.hyperframes-cache/
+promo-structsynth/.waveform-cache/
+promo-structsynth/renders/
+promo-structsynth/snapshots/
+promo-structsynth/*.log

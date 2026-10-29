@@ -1,0 +1,411 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "HF Song";
+      src: local("Songti SC"), local("STSong");
+      font-weight: 400 700;
+    }
+    @font-face {
+      font-family: "HF Sans";
+      src: local("PingFang SC"), local("Hiragino Sans GB");
+      font-weight: 300 700;
+    }
+    @font-face {
+      font-family: "HF Math";
+      src: local("Times New Roman"), local("STIX Two Text");
+      font-weight: 400 700;
+    }
+    @font-face {
+      font-family: "HF Mono";
+      src: local("Menlo"), local("SFMono-Regular");
+      font-weight: 400 700;
+    }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #0d2923;
+      color: #f2f0e9;
+    }
+
+    #cmo-world {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .cmo-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.24;
+      background-image:
+        linear-gradient(rgba(185, 214, 202, 0.14) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(185, 214, 202, 0.14) 1px, transparent 1px);
+      background-size: 72px 72px;
+    }
+
+    .cmo-glow {
+      position: absolute;
+      width: 850px;
+      height: 850px;
+      top: 120px;
+      left: 130px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(220, 106, 77, 0.22) 0,
+        rgba(220, 106, 77, 0.04) 45%,
+        transparent 70%
+      );
+    }
+
+    .ghost-eq {
+      position: absolute;
+      right: -130px;
+      top: 730px;
+      width: 1050px;
+      color: rgba(185, 214, 202, 0.1);
+      font-family: "HF Math";
+      font-size: 106px;
+      white-space: nowrap;
+      transform: rotate(-9deg);
+    }
+
+    .cmo-kicker {
+      position: absolute;
+      top: 184px;
+      left: 74px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: "HF Mono";
+      font-size: 24px;
+      letter-spacing: 0.13em;
+      color: #b9d6ca;
+    }
+
+    .cmo-kicker::before {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #dc6a4d;
+      box-shadow: 0 0 24px rgba(220, 106, 77, 0.8);
+      content: "";
+    }
+
+    .cmo-title {
+      position: absolute;
+      top: 238px;
+      left: 70px;
+      margin: 0;
+      width: 860px;
+      color: #f2f0e9;
+      font-family: "HF Song";
+      font-size: 92px;
+      font-weight: 700;
+      line-height: 1.06;
+      letter-spacing: -0.05em;
+    }
+
+    .cmo-title span {
+      color: #dc6a4d;
+      font-style: italic;
+    }
+
+    .formula-shell {
+      position: absolute;
+      top: 420px;
+      left: 64px;
+      width: 952px;
+      min-height: 450px;
+      padding: 38px 42px;
+      border: 1px solid rgba(185, 214, 202, 0.36);
+      border-radius: 10px;
+      background: rgba(10, 35, 29, 0.78);
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.28);
+    }
+
+    .sheet-meta {
+      display: flex;
+      justify-content: space-between;
+      color: #b9d6ca;
+      font-family: "HF Mono";
+      font-size: 19px;
+      letter-spacing: 0.08em;
+    }
+
+    .main-formula {
+      margin: 34px 0 18px;
+      color: #fffdf5;
+      font-family: "HF Math";
+      font-size: 67px;
+      line-height: 1.18;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .definition-row {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 25px;
+    }
+
+    .definition {
+      min-height: 113px;
+      padding: 12px 10px;
+      border-top: 1px solid rgba(185, 214, 202, 0.25);
+      color: #b9d6ca;
+      font-family: "HF Math";
+      font-size: 25px;
+      line-height: 1.3;
+      text-align: center;
+    }
+
+    .definition b {
+      display: block;
+      margin-bottom: 9px;
+      color: #dc6a4d;
+      font-family: "HF Mono";
+      font-size: 19px;
+      font-weight: 500;
+    }
+
+    .term-chip {
+      position: absolute;
+      top: 900px;
+      min-width: 126px;
+      padding: 12px 17px;
+      border: 1px solid rgba(185, 214, 202, 0.28);
+      border-radius: 999px;
+      background: #173d34;
+      color: #f2f0e9;
+      font-family: "HF Mono";
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .term-chip.t1 {
+      left: 75px;
+    }
+    .term-chip.t2 {
+      left: 265px;
+    }
+    .term-chip.t3 {
+      left: 455px;
+    }
+    .term-chip.t4 {
+      left: 645px;
+    }
+
+    .cmo-thesis {
+      position: absolute;
+      top: 1022px;
+      left: 72px;
+      width: 920px;
+      margin: 0;
+      font-family: "HF Song";
+      font-size: 57px;
+      font-weight: 700;
+      line-height: 1.35;
+      letter-spacing: -0.035em;
+    }
+
+    .cmo-thesis span {
+      color: #dc6a4d;
+    }
+
+    .depth-panel {
+      position: absolute;
+      left: 70px;
+      right: 70px;
+      top: 1210px;
+      height: 190px;
+      padding: 25px 30px;
+      border-top: 1px solid rgba(185, 214, 202, 0.35);
+      border-bottom: 1px solid rgba(185, 214, 202, 0.35);
+    }
+
+    .depth-head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      font-family: "HF Mono";
+      font-size: 20px;
+      letter-spacing: 0.1em;
+      color: #b9d6ca;
+    }
+
+    .depth-head strong {
+      color: #dc6a4d;
+      font-size: 29px;
+      font-weight: 500;
+    }
+
+    .depth-bars {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 12px;
+      margin-top: 28px;
+    }
+
+    .depth-bars i {
+      display: block;
+      height: 41px;
+      border: 1px solid rgba(185, 214, 202, 0.22);
+      background: rgba(185, 214, 202, 0.05);
+      transform-origin: left center;
+    }
+
+    .depth-bars i.on {
+      border-color: rgba(220, 106, 77, 0.65);
+      background: linear-gradient(90deg, #dc6a4d, #eeb187);
+    }
+
+    .signal-scan {
+      position: absolute;
+      top: 110px;
+      bottom: 500px;
+      left: 0;
+      width: 7px;
+      background: #dc6a4d;
+      box-shadow: 0 0 30px rgba(220, 106, 77, 0.85);
+    }
+
+    .footer-index {
+      position: absolute;
+      left: 72px;
+      bottom: 138px;
+      color: rgba(185, 214, 202, 0.65);
+      font-family: "HF Mono";
+      font-size: 18px;
+      letter-spacing: 0.08em;
+    }
+  </style>
+
+  <div data-hf-id="hf-lwix"
+    id="root"
+    data-composition-id="beat-4-cmo"
+    data-start="0"
+    data-duration="9"
+    data-width="1080"
+    data-height="1920"
+  >
+    <div data-hf-id="hf-gfuh"
+      id="cmo-stage"
+      class="clip"
+      data-start="0"
+      data-duration="9"
+      data-track-index="0"
+      style="position: absolute; inset: 0"
+    >
+      <div data-hf-id="hf-xn77" id="cmo-world">
+      <div data-hf-id="hf-iuxw" class="cmo-grid"></div>
+      <div data-hf-id="hf-uqrr" class="cmo-glow"></div>
+      <div data-hf-id="hf-pl1f" class="ghost-eq">e₂² ≤ λ e₂e₃ + (3/n)V</div>
+      <div data-hf-id="hf-j8im" class="signal-scan"></div>
+      <div data-hf-id="hf-k999" class="cmo-kicker">CMO / DEPTH SPIKE / 04</div>
+      <h2 data-hf-id="hf-7gbo" id="cmo-title" class="cmo-title">另一座<span data-hf-id="hf-a9g1">高峰</span></h2>
+
+      <section data-hf-id="hf-k4do" id="formula-shell" class="formula-shell">
+        <div data-hf-id="hf-7wph" class="sheet-meta">
+          <span data-hf-id="hf-h9wt">GLOBAL INEQUALITY</span>
+          <span data-hf-id="hf-8lxx">DEPTH SIGNAL 05</span>
+        </div>
+        <div data-hf-id="hf-tszp" class="main-formula">e₂² ≤ λ e₂e₃ + (3/n)V</div>
+        <div data-hf-id="hf-t45s" class="definition-row">
+          <div data-hf-id="hf-uqpi" class="definition"><b data-hf-id="hf-q3ae">e₂</b>Σ xᵢ xⱼ</div>
+          <div data-hf-id="hf-hzc8" class="definition"><b data-hf-id="hf-pozd">e₃</b>Σ xᵢ xⱼ xₖ</div>
+          <div data-hf-id="hf-k1qb" class="definition"><b data-hf-id="hf-68qx">V</b>Σ (xᵢ−xⱼ)²</div>
+        </div>
+      </section>
+
+      <div data-hf-id="hf-jbbg" class="term-chip t1">紧约束</div>
+      <div data-hf-id="hf-dmnn" class="term-chip t2">非线性</div>
+      <div data-hf-id="hf-49ms" class="term-chip t3">全局界</div>
+      <div data-hf-id="hf-k03y" class="term-chip t4">极值构造</div>
+
+      <h3 data-hf-id="hf-7qiv" id="cmo-thesis" class="cmo-thesis">
+        真正难的，是迁移<br data-hf-id="hf-x5px" /><span data-hf-id="hf-ivzc">整条推理链。</span>
+      </h3>
+
+      <div data-hf-id="hf-dpiq" id="depth-panel" class="depth-panel">
+        <div data-hf-id="hf-2mxq" class="depth-head">
+          <span data-hf-id="hf-qru6">REASONING DEPTH</span>
+          <strong data-hf-id="hf-8wpn">HIGH / GLOBAL PROOF</strong>
+        </div>
+        <div data-hf-id="hf-wev2" class="depth-bars">
+          <i data-hf-id="hf-l5u7" class="on"></i><i data-hf-id="hf-j2zz" class="on"></i><i data-hf-id="hf-iooy" class="on"></i><i data-hf-id="hf-iadx" class="on"></i><i data-hf-id="hf-l2j4" class="on"></i>
+        </div>
+      </div>
+      <div data-hf-id="hf-n6w1" class="footer-index">STRUCTURE 04 / CMO EQUATION</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+
+    tl.fromTo(
+      "#cmo-world",
+      { opacity: 0, scale: 1.04, filter: "blur(14px)" },
+      { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.28, ease: "power4.out" },
+      0,
+    );
+    tl.fromTo(
+      "#cmo-title",
+      { opacity: 0, x: -76 },
+      { opacity: 1, x: 0, duration: 0.42 },
+      0.18,
+    );
+    tl.fromTo(
+      "#formula-shell",
+      { opacity: 0, y: 110, rotation: 1.4 },
+      { opacity: 1, y: 0, rotation: 0, duration: 0.52, ease: "expo.out" },
+      0.55,
+    );
+    tl.fromTo(
+      ".definition",
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 0.34, stagger: 0.13 },
+      1.15,
+    );
+    tl.fromTo(
+      ".term-chip",
+      { opacity: 0, scale: 0.72, y: 20 },
+      { opacity: 1, scale: 1, y: 0, duration: 0.28, stagger: 0.1 },
+      2.0,
+    );
+    tl.fromTo(
+      "#cmo-thesis",
+      { opacity: 0, y: 60, filter: "blur(8px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.55 },
+      2.8,
+    );
+    tl.fromTo(
+      "#depth-panel",
+      { opacity: 0, y: 36 },
+      { opacity: 1, y: 0, duration: 0.38 },
+      3.45,
+    );
+    tl.fromTo(
+      ".depth-bars i.on",
+      { scaleX: 0 },
+      { scaleX: 1, duration: 0.34, stagger: 0.16, ease: "power3.out" },
+      3.72,
+    );
+    tl.to(".signal-scan", { x: 1000, duration: 1.15, ease: "power2.inOut" }, 4.0);
+    tl.to(".ghost-eq", { x: -80, duration: 6.0, ease: "none" }, 0);
+    tl.to(".cmo-grid", { backgroundPosition: "72px 144px", duration: 9, ease: "none" }, 0);
+    tl.to(
+      "#cmo-world",
+      { scale: 1.08, filter: "blur(18px)", opacity: 0, duration: 0.35, ease: "power3.in" },
+      8.62,
+    );
+    tl.set("#cmo-world", { opacity: 0, visibility: "hidden" }, 8.97);
+
+    window.__timelines["beat-4-cmo"] = tl;
+    tl.seek(0);
+  </script>
+</template>

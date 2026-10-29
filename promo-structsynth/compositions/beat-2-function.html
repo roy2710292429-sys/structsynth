@@ -1,0 +1,403 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "HF Song";
+      src: local("Songti SC"), local("STSong");
+      font-weight: 400 700;
+    }
+    @font-face {
+      font-family: "HF Sans";
+      src: local("PingFang SC"), local("Hiragino Sans GB");
+      font-weight: 300 700;
+    }
+    @font-face {
+      font-family: "HF Math";
+      src: local("Times New Roman"), local("STIX Two Text");
+      font-weight: 400 700;
+    }
+    @font-face {
+      font-family: "HF Mono";
+      src: local("Menlo"), local("SFMono-Regular");
+      font-weight: 400 700;
+    }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      color: #172421;
+      background: #f2f0e9;
+      font-family: "HF Sans";
+    }
+
+    #function-world {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 93% 8%, rgba(185, 214, 202, 0.48), transparent 300px),
+        #f2f0e9;
+    }
+
+    .paper-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.22;
+      background-image:
+        linear-gradient(rgba(23, 36, 33, 0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 36, 33, 0.04) 1px, transparent 1px);
+      background-size: 52px 52px;
+    }
+
+    .function-kicker {
+      position: absolute;
+      top: 184px;
+      left: 68px;
+      color: #1d6557;
+      font-family: "HF Mono";
+      font-size: 19px;
+      letter-spacing: 0.11em;
+    }
+
+    .function-title {
+      position: absolute;
+      top: 225px;
+      left: 66px;
+      margin: 0;
+      font-family: "HF Song";
+      font-size: 70px;
+      font-weight: 700;
+      line-height: 1.08;
+      letter-spacing: -0.045em;
+    }
+
+    .function-title span {
+      color: #dc6a4d;
+    }
+
+    .exam-sheet {
+      position: absolute;
+      top: 365px;
+      left: 56px;
+      width: 968px;
+      min-height: 780px;
+      padding: 36px 40px;
+      border: 1px solid #d8d4c8;
+      border-radius: 9px;
+      background: #faf9f4;
+      box-shadow: 0 24px 70px rgba(35, 45, 39, 0.09);
+    }
+
+    .sheet-head {
+      display: flex;
+      justify-content: space-between;
+      color: #777e79;
+      font-family: "HF Mono";
+      font-size: 17px;
+      letter-spacing: 0.07em;
+    }
+
+    .sheet-head b {
+      color: #1d6557;
+      font-weight: 500;
+    }
+
+    .given-function {
+      margin-top: 40px;
+      color: #172421;
+      font-family: "HF Math";
+      font-size: 67px;
+      line-height: 1.2;
+      text-align: center;
+    }
+
+    .given-function .base-token {
+      position: relative;
+      display: inline-block;
+      min-width: 44px;
+      color: #1d6557;
+      text-align: center;
+    }
+
+    .base-three {
+      position: absolute;
+      inset: 0;
+      color: #dc6a4d;
+      opacity: 0;
+    }
+
+    .domain-line {
+      margin-top: 28px;
+      padding: 19px 18px;
+      border: 1px solid #d8d4c8;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #283631;
+      font-family: "HF Math";
+      font-size: 42px;
+      text-align: center;
+    }
+
+    .domain-line b {
+      color: #dc6a4d;
+      font-weight: 500;
+    }
+
+    .question-rail {
+      display: grid;
+      grid-template-columns: 0.9fr 1.17fr 1.17fr;
+      gap: 10px;
+      margin-top: 30px;
+    }
+
+    .question-block {
+      min-height: 230px;
+      padding: 17px 15px;
+      border-top: 3px solid #b9d6ca;
+      background: #f4f2eb;
+    }
+
+    .question-block:nth-child(2) {
+      border-color: #1d6557;
+    }
+
+    .question-block:nth-child(3) {
+      border-color: #dc6a4d;
+    }
+
+    .question-block > span {
+      display: block;
+      color: #7b827d;
+      font-family: "HF Mono";
+      font-size: 16px;
+      letter-spacing: 0.07em;
+    }
+
+    .question-block strong {
+      display: block;
+      margin-top: 13px;
+      font-size: 25px;
+      line-height: 1.45;
+    }
+
+    .question-block em {
+      color: #1d6557;
+      font-family: "HF Math";
+      font-size: 31px;
+      font-style: italic;
+      font-weight: 400;
+    }
+
+    .scanner {
+      position: absolute;
+      top: 380px;
+      bottom: 530px;
+      left: 50px;
+      width: 5px;
+      background: #dc6a4d;
+      box-shadow: 0 0 24px rgba(220, 106, 77, 0.65);
+    }
+
+    .structure-lock {
+      position: absolute;
+      left: 56px;
+      right: 56px;
+      top: 1190px;
+      padding: 20px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border: 1px solid rgba(29, 101, 87, 0.35);
+      border-radius: 7px;
+      background: rgba(250, 249, 244, 0.88);
+    }
+
+    .structure-lock strong {
+      color: #1d6557;
+      font-family: "HF Song";
+      font-size: 38px;
+      line-height: 1;
+    }
+
+    .structure-lock span {
+      color: #52615c;
+      font-family: "HF Mono";
+      font-size: 17px;
+      letter-spacing: 0.05em;
+    }
+
+    .lock-tags {
+      display: flex;
+      gap: 7px;
+      margin-top: 12px;
+    }
+
+    .lock-tags i {
+      padding: 6px 9px;
+      border-radius: 4px;
+      background: rgba(185, 214, 202, 0.6);
+      color: #123e37;
+      font-family: "HF Mono";
+      font-size: 16px;
+      font-style: normal;
+    }
+
+    .paper-index {
+      position: absolute;
+      left: 68px;
+      right: 68px;
+      bottom: 172px;
+      display: flex;
+      justify-content: space-between;
+      color: #7b827d;
+      font-family: "HF Mono";
+      font-size: 16px;
+      letter-spacing: 0.07em;
+    }
+  </style>
+
+  <div data-hf-id="hf-bbfi"
+    id="root"
+    data-composition-id="beat-2-function"
+    data-start="0"
+    data-duration="10"
+    data-width="1080"
+    data-height="1920"
+  >
+    <div data-hf-id="hf-4b68"
+      id="function-stage"
+      class="clip"
+      data-start="0"
+      data-duration="10"
+      data-track-index="0"
+      style="position: absolute; inset: 0"
+    >
+      <div data-hf-id="hf-dlpa" id="function-world">
+        <div data-hf-id="hf-7yqz" class="paper-grid"></div>
+        <div data-hf-id="hf-l9pz" class="function-kicker">01 / SAME FAMILY, NEW SURFACE</div>
+        <h1 data-hf-id="hf-uoxv" id="function-title" class="function-title">
+          换个底数，<span data-hf-id="hf-aoi3">结构不动。</span>
+        </h1>
+
+        <section data-hf-id="hf-lt7e" id="exam-sheet" class="exam-sheet">
+          <div data-hf-id="hf-b3ys" class="sheet-head">
+            <span data-hf-id="hf-kerg">SEED QUESTION</span>
+            <b data-hf-id="hf-b71n">函数定义域 / 集合 / 单调性</b>
+          </div>
+
+          <div data-hf-id="hf-tg9x" id="given-function" class="given-function">
+            当 x&lt;0 时，f(x)=<span data-hf-id="hf-qwzi" class="base-token"><span data-hf-id="hf-sb3f" class="base-two">2</span><span data-hf-id="hf-6r4e" class="base-three">3</span></span><sup data-hf-id="hf-6mw5">x</sup>
+          </div>
+
+          <div data-hf-id="hf-d6u5" id="domain-line" class="domain-line">
+            <b data-hf-id="hf-pu54">D(x₀)</b> = { d ∈ ℝ | f(x₀+d) &gt; f(x₀) }
+          </div>
+
+          <div data-hf-id="hf-tmax" class="question-rail">
+            <div data-hf-id="hf-p3yk" class="question-block">
+              <span data-hf-id="hf-wj20">QUESTION 01 / EVALUATE</span>
+              <strong data-hf-id="hf-wdbu">当 x≥0 时，<br data-hf-id="hf-x5px" /><em data-hf-id="hf-x66y">f(x)=1−x</em><br data-hf-id="hf-rsrt" />求 D(−1)</strong>
+            </div>
+            <div data-hf-id="hf-g95w" class="question-block">
+              <span data-hf-id="hf-4096">QUESTION 02 / PROVE</span>
+              <strong data-hf-id="hf-kfa8">奇函数<br data-hf-id="hf-szow" /><em data-hf-id="hf-o2r6">f(x₁)≤f(x₂)</em><br data-hf-id="hf-sldv" />证明 D(x₂)⊆D(x₁)</strong>
+            </div>
+            <div data-hf-id="hf-f28t" class="question-block">
+              <span data-hf-id="hf-elbq">QUESTION 03 / STRUCTURE</span>
+              <strong data-hf-id="hf-bo75">条件蕴含<br data-hf-id="hf-qluq" /><em data-hf-id="hf-pu00">f(0)≥1</em><br data-hf-id="hf-q7jp" />推导严格单调</strong>
+            </div>
+          </div>
+        </section>
+
+        <div data-hf-id="hf-miru" class="scanner"></div>
+
+        <div data-hf-id="hf-b32i" id="structure-lock" class="structure-lock">
+          <div data-hf-id="hf-yeow">
+            <strong data-hf-id="hf-xlqv">STRUCTURE LOCKED</strong>
+            <div data-hf-id="hf-0gxp" class="lock-tags">
+              <i data-hf-id="hf-v3sz">D(x₀)</i><i data-hf-id="hf-owx8">奇函数</i><i data-hf-id="hf-8xtc">包含</i><i data-hf-id="hf-oatr">单调证明</i>
+            </div>
+          </div>
+          <span data-hf-id="hf-exzi">换题面 ≠ 换结构</span>
+        </div>
+
+        <div data-hf-id="hf-ekop" class="paper-index">
+          <span data-hf-id="hf-hnl3">SEED / FUNCTION</span>
+          <span data-hf-id="hf-008q">DEPTH PRESERVED</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+
+    tl.fromTo(
+      "#function-world",
+      { opacity: 0, y: 40, filter: "blur(12px)" },
+      { opacity: 1, y: 0, filter: "blur(0px)", duration: 0.38, ease: "expo.out" },
+      0,
+    );
+    tl.fromTo(
+      "#function-title",
+      { opacity: 0, x: -58 },
+      { opacity: 1, x: 0, duration: 0.38 },
+      0.15,
+    );
+    tl.fromTo(
+      "#exam-sheet",
+      { opacity: 0, y: 76, rotation: 0.8 },
+      { opacity: 1, y: 0, rotation: 0, duration: 0.52, ease: "expo.out" },
+      0.45,
+    );
+    tl.fromTo(
+      "#given-function",
+      { opacity: 0, y: 24 },
+      { opacity: 1, y: 0, duration: 0.32 },
+      0.9,
+    );
+    tl.fromTo(
+      "#domain-line",
+      { opacity: 0, scale: 0.95 },
+      { opacity: 1, scale: 1, duration: 0.35 },
+      1.18,
+    );
+    tl.fromTo(
+      ".question-block",
+      { opacity: 0, y: 28 },
+      { opacity: 1, y: 0, duration: 0.34, stagger: 0.17 },
+      1.55,
+    );
+    tl.to(".scanner", { x: 930, duration: 1.35, ease: "power2.inOut" }, 2.55);
+    tl.to(".base-two", { opacity: 0, y: -16, duration: 0.2, ease: "power3.in" }, 4.0);
+    tl.fromTo(
+      ".base-three",
+      { opacity: 0, y: 22, scale: 1.55, color: "#dc6a4d" },
+      { opacity: 1, y: 0, scale: 1, duration: 0.28, ease: "back.out(1.7)" },
+      4.05,
+    );
+    tl.fromTo(
+      "#structure-lock",
+      { opacity: 0, y: 40 },
+      { opacity: 1, y: 0, duration: 0.4 },
+      4.7,
+    );
+    tl.fromTo(
+      ".lock-tags i",
+      { opacity: 0, scale: 0.72 },
+      { opacity: 1, scale: 1, duration: 0.2, stagger: 0.1 },
+      5.0,
+    );
+    tl.to(".paper-grid", { backgroundPosition: "52px 104px", duration: 10, ease: "none" }, 0);
+    tl.to("#exam-sheet", { scale: 1.015, duration: 9.2, ease: "sine.inOut" }, 0.45);
+    tl.to(
+      "#function-world",
+      { y: -110, filter: "blur(18px)", opacity: 0, duration: 0.35, ease: "power3.in" },
+      9.58,
+    );
+    tl.set("#function-world", { opacity: 0, visibility: "hidden" }, 9.98);
+
+    window.__timelines["beat-2-function"] = tl;
+    tl.seek(0);
+  </script>
+</template>

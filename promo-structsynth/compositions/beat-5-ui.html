@@ -1,0 +1,562 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "HF Song";
+      src: local("Songti SC"), local("STSong");
+      font-weight: 400 700;
+    }
+    @font-face {
+      font-family: "HF Sans";
+      src: local("PingFang SC"), local("Hiragino Sans GB");
+      font-weight: 300 700;
+    }
+    @font-face {
+      font-family: "HF Mono";
+      src: local("Menlo"), local("SFMono-Regular");
+      font-weight: 400 700;
+    }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background: #f2f0e9;
+      color: #172421;
+      font-family: "HF Sans";
+    }
+
+    #ui-world {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      background:
+        radial-gradient(circle at 82% 7%, rgba(185, 214, 202, 0.42), transparent 330px),
+        #f2f0e9;
+    }
+
+    .ui-noise {
+      position: absolute;
+      inset: 0;
+      opacity: 0.2;
+      background-image:
+        linear-gradient(rgba(23, 36, 33, 0.035) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(23, 36, 33, 0.035) 1px, transparent 1px);
+      background-size: 48px 48px;
+    }
+
+    .ui-header {
+      position: absolute;
+      top: 176px;
+      left: 66px;
+      right: 66px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .brandline {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+    }
+
+    .brandline img {
+      width: 52px;
+      height: 52px;
+    }
+
+    .brandline strong {
+      display: block;
+      font-family: "HF Song";
+      font-size: 31px;
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .brandline span {
+      display: block;
+      margin-top: 4px;
+      color: #52615c;
+      font-family: "HF Mono";
+      font-size: 16px;
+      letter-spacing: 0.08em;
+    }
+
+    .mode-badge {
+      padding: 9px 14px;
+      border: 1px solid #1d6557;
+      border-radius: 999px;
+      color: #1d6557;
+      font-family: "HF Mono";
+      font-size: 17px;
+      letter-spacing: 0.04em;
+    }
+
+    .seed-card,
+    .parameter-card,
+    .profile-card,
+    .result-card {
+      position: absolute;
+      left: 66px;
+      width: 948px;
+      border: 1px solid #d8d4c8;
+      border-radius: 11px;
+      background: rgba(250, 249, 244, 0.9);
+      box-shadow: 0 22px 60px rgba(35, 45, 39, 0.08);
+    }
+
+    .seed-card {
+      top: 262px;
+      height: 306px;
+      padding: 25px 27px;
+    }
+
+    .card-label {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      color: #52615c;
+      font-family: "HF Mono";
+      font-size: 18px;
+      letter-spacing: 0.05em;
+    }
+
+    .card-label b {
+      color: #1d6557;
+      font-weight: 600;
+    }
+
+    .seed-line {
+      margin: 10px 0;
+      padding: 11px 14px;
+      border-left: 3px solid #b9d6ca;
+      background: rgba(255, 255, 255, 0.52);
+      color: #35423e;
+      font-family: "HF Song";
+      font-size: 24px;
+      line-height: 1.42;
+    }
+
+    .seed-line em {
+      color: #dc6a4d;
+      font-style: normal;
+      font-weight: 700;
+    }
+
+    .parameter-card {
+      top: 592px;
+      height: 214px;
+      padding: 24px 27px;
+    }
+
+    .slider-label {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      font-size: 25px;
+      font-weight: 600;
+    }
+
+    .slider-label span:last-child {
+      color: #1d6557;
+      font-family: "HF Mono";
+      font-size: 26px;
+    }
+
+    .slider-track {
+      position: relative;
+      height: 8px;
+      margin-top: 38px;
+      border-radius: 99px;
+      background: #d8d4c8;
+    }
+
+    .slider-fill {
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 35%;
+      border-radius: 99px;
+      background: #1d6557;
+      transform-origin: left center;
+    }
+
+    .slider-knob {
+      position: absolute;
+      top: -13px;
+      left: calc(35% - 16px);
+      width: 34px;
+      height: 34px;
+      border: 5px solid #faf9f4;
+      border-radius: 50%;
+      background: #1d6557;
+      box-shadow: 0 0 0 1px #1d6557, 0 8px 18px rgba(29, 101, 87, 0.25);
+    }
+
+    .slider-notes {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 24px;
+      color: #747d78;
+      font-size: 19px;
+    }
+
+    .profile-card {
+      top: 832px;
+      height: 318px;
+      padding: 24px 27px;
+      border-color: rgba(29, 101, 87, 0.42);
+      background:
+        linear-gradient(118deg, rgba(185, 214, 202, 0.3), transparent 65%),
+        #faf9f4;
+    }
+
+    .profile-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 22px;
+    }
+
+    .profile-top h3 {
+      margin: 8px 0 0;
+      font-family: "HF Song";
+      font-size: 42px;
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .depth-number {
+      color: #1d6557;
+      font-family: "HF Mono";
+      font-size: 31px;
+      line-height: 1;
+    }
+
+    .depth-number small {
+      color: #52615c;
+      font-family: "HF Mono";
+      font-size: 17px;
+    }
+
+    .operation-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 9px;
+      margin-top: 24px;
+    }
+
+    .operation-row span {
+      padding: 8px 12px;
+      border: 1px solid rgba(29, 101, 87, 0.25);
+      border-radius: 5px;
+      background: rgba(29, 101, 87, 0.06);
+      color: #1d6557;
+      font-size: 20px;
+    }
+
+    .depth-lines {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      gap: 8px;
+      margin-top: 28px;
+    }
+
+    .depth-lines i {
+      height: 8px;
+      border-radius: 99px;
+      background: #1d6557;
+      transform-origin: left center;
+    }
+
+    .result-card {
+      top: 1176px;
+      height: 208px;
+      padding: 24px 27px;
+      overflow: hidden;
+      background: #172421;
+      color: #f2f0e9;
+    }
+
+    .result-top {
+      display: flex;
+      justify-content: space-between;
+      color: #b9d6ca;
+      font-family: "HF Mono";
+      font-size: 18px;
+      letter-spacing: 0.06em;
+    }
+
+    .result-main {
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+      margin-top: 25px;
+    }
+
+    .result-main strong {
+      font-family: "HF Song";
+      font-size: 54px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .result-main strong span {
+      color: #dc6a4d;
+    }
+
+    .statuses {
+      display: grid;
+      gap: 7px;
+      font-family: "HF Mono";
+      font-size: 17px;
+      text-align: right;
+    }
+
+    .statuses span {
+      color: #b9d6ca;
+    }
+
+    .cursor {
+      position: absolute;
+      top: 1000px;
+      left: 820px;
+      width: 58px;
+      height: 58px;
+      z-index: 20;
+      filter: drop-shadow(0 8px 10px rgba(23, 36, 33, 0.32));
+    }
+
+    .cursor::before {
+      position: absolute;
+      width: 42px;
+      height: 50px;
+      clip-path: polygon(0 0, 100% 68%, 58% 70%, 44% 100%);
+      content: "";
+      background: #faf9f4;
+      border: 2px solid #172421;
+    }
+
+    .cursor .click-ring {
+      position: absolute;
+      left: 38px;
+      top: 37px;
+      width: 30px;
+      height: 30px;
+      border: 3px solid #dc6a4d;
+      border-radius: 50%;
+      content: "";
+      opacity: 0;
+      transform: scale(0.2);
+    }
+
+    .vertical-mark {
+      position: absolute;
+      right: 31px;
+      top: 405px;
+      color: rgba(29, 101, 87, 0.18);
+      font-family: "HF Mono";
+      font-size: 28px;
+      letter-spacing: 0.18em;
+      writing-mode: vertical-rl;
+    }
+  </style>
+
+  <div data-hf-id="hf-z4j8"
+    id="root"
+    data-composition-id="beat-5-ui"
+    data-start="0"
+    data-duration="8"
+    data-width="1080"
+    data-height="1920"
+  >
+    <div data-hf-id="hf-g6sf"
+      id="ui-stage"
+      class="clip"
+      data-start="0"
+      data-duration="8"
+      data-track-index="0"
+      style="position: absolute; inset: 0"
+    >
+      <div data-hf-id="hf-fvok" id="ui-world">
+        <div data-hf-id="hf-fsxv" class="ui-noise"></div>
+        <div data-hf-id="hf-aiwu" class="vertical-mark">SAME FAMILY / NEW SURFACE</div>
+
+        <header data-hf-id="hf-ss6m" id="ui-header" class="ui-header">
+          <div data-hf-id="hf-lyh1" class="brandline">
+            <img
+              id="ui-brand-mark"
+              data-hf-id="hf-3i1k"
+              class="clip"
+              src="assets/brand/mark.svg"
+              alt="StructSynth"
+              data-start="0"
+              data-duration="8"
+              data-track-index="1"
+            />
+            <div data-hf-id="hf-yeow">
+              <strong data-hf-id="hf-uua7">StructSynth</strong>
+              <span data-hf-id="hf-i3cz">同类题生成实验台</span>
+            </div>
+          </div>
+          <div data-hf-id="hf-1447" class="mode-badge">DEPTH-FIRST</div>
+        </header>
+
+        <section data-hf-id="hf-ptna" id="seed-card" class="seed-card">
+          <div data-hf-id="hf-zz3v" class="card-label">
+            <b data-hf-id="hf-l4ne">种子题目</b>
+            <span data-hf-id="hf-gc42">03 SEEDS / STRUCTURE FAMILY</span>
+          </div>
+          <div data-hf-id="hf-ow30" class="seed-line">
+            当 <em data-hf-id="hf-xoih">x&lt;0</em> 时，f(x)=<em data-hf-id="hf-jhg4">2ˣ</em>；定义 D(x₀)…
+          </div>
+          <div data-hf-id="hf-6urx" class="seed-line">
+            若 x≥0，f(x)=<em data-hf-id="hf-ph7s">1−x</em>；求 D(−1)
+          </div>
+          <div data-hf-id="hf-bpjq" class="seed-line">
+            奇函数、包含关系、单调性证明…
+          </div>
+        </section>
+
+        <section data-hf-id="hf-cq1m" id="parameter-card" class="parameter-card">
+          <div data-hf-id="hf-k33m" class="slider-label">
+            <span data-hf-id="hf-3xqg">语段邻域比例</span>
+            <span data-hf-id="hf-p7a0" id="slider-value">35%</span>
+          </div>
+          <div data-hf-id="hf-t7f1" class="slider-track">
+            <i data-hf-id="hf-xr1r" class="slider-fill"></i>
+            <i data-hf-id="hf-sxw8" class="slider-knob"></i>
+          </div>
+          <div data-hf-id="hf-x6ev" class="slider-notes">
+            <span data-hf-id="hf-l9qf">严格结构</span>
+            <span data-hf-id="hf-k44w">灵活同类</span>
+          </div>
+        </section>
+
+        <section data-hf-id="hf-f6fq" id="profile-card" class="profile-card">
+          <div data-hf-id="hf-l53t" class="profile-top">
+            <div data-hf-id="hf-y7yw">
+              <div data-hf-id="hf-b9js" class="card-label">思维难度画像</div>
+              <h3 data-hf-id="hf-nxrh">证明型 / 多步依赖</h3>
+            </div>
+            <div data-hf-id="hf-a3zh" class="depth-number">DEEP<small data-hf-id="hf-zi4s"> / MULTI-STEP</small></div>
+          </div>
+          <div data-hf-id="hf-fl4g" class="operation-row">
+            <span data-hf-id="hf-sqht">条件转译</span><span data-hf-id="hf-5dps">多步推导</span><span data-hf-id="hf-zl8b">包含关系</span
+            ><span data-hf-id="hf-iut1">结果验证</span>
+          </div>
+          <div data-hf-id="hf-g0s9" class="depth-lines"><i data-hf-id="hf-wt6k"></i><i data-hf-id="hf-zeb8"></i><i data-hf-id="hf-y7e5"></i><i data-hf-id="hf-ylp6"></i><i data-hf-id="hf-0l8b"></i></div>
+        </section>
+
+        <section data-hf-id="hf-8p0e" id="result-card" class="result-card">
+          <div data-hf-id="hf-b11p" class="result-top">
+            <span data-hf-id="hf-qrpy">STRUCTURE CHECK</span>
+            <span data-hf-id="hf-ja7z">SURFACE ≠ SKELETON</span>
+          </div>
+          <div data-hf-id="hf-4ybf" class="result-main">
+            <strong data-hf-id="hf-pxxk">同类 <span data-hf-id="hf-4rir">≠</span> 同句</strong>
+            <div data-hf-id="hf-kp6e" class="statuses">
+              <span data-hf-id="hf-0m7h">结构族：同</span>
+              <span data-hf-id="hf-2l9i">思维深度：对齐</span>
+              <span data-hf-id="hf-mkhm">表面表达：可变</span>
+            </div>
+          </div>
+        </section>
+
+        <div data-hf-id="hf-c0g2" id="cursor" class="cursor"><i data-hf-id="hf-wzi6" id="click-ring" class="click-ring"></i></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+
+    tl.fromTo(
+      "#ui-world",
+      { opacity: 0, scale: 0.92, filter: "blur(16px)" },
+      { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.48, ease: "expo.out" },
+      0,
+    );
+    tl.fromTo(
+      "#ui-header",
+      { opacity: 0, y: -32 },
+      { opacity: 1, y: 0, duration: 0.32 },
+      0.12,
+    );
+    tl.fromTo(
+      "#seed-card",
+      { opacity: 0, y: 66 },
+      { opacity: 1, y: 0, duration: 0.42 },
+      0.24,
+    );
+    tl.fromTo(
+      ".seed-line",
+      { opacity: 0, x: -26 },
+      { opacity: 1, x: 0, duration: 0.25, stagger: 0.11 },
+      0.56,
+    );
+    tl.fromTo(
+      "#parameter-card",
+      { opacity: 0, y: 45 },
+      { opacity: 1, y: 0, duration: 0.36 },
+      1.0,
+    );
+    tl.fromTo(
+      "#profile-card",
+      { opacity: 0, y: 52 },
+      { opacity: 1, y: 0, duration: 0.4 },
+      1.32,
+    );
+    tl.fromTo(
+      ".operation-row span",
+      { opacity: 0, y: 15 },
+      { opacity: 1, y: 0, duration: 0.2, stagger: 0.08 },
+      1.62,
+    );
+    tl.fromTo(
+      ".depth-lines i",
+      { scaleX: 0 },
+      { scaleX: 1, duration: 0.24, stagger: 0.08 },
+      1.92,
+    );
+    tl.fromTo(
+      "#cursor",
+      { opacity: 0, x: 0, y: 0 },
+      { opacity: 1, x: -300, y: -233, duration: 0.7, ease: "power2.inOut" },
+      2.25,
+    );
+    tl.fromTo(
+      "#click-ring",
+      { opacity: 0 },
+      { opacity: 1, duration: 0.01 },
+      2.95,
+    );
+    tl.to(".slider-fill", { scaleX: 1.286, duration: 0.45, ease: "power2.inOut" }, 2.98);
+    tl.to(".slider-knob", { x: 104, duration: 0.45, ease: "power2.inOut" }, 2.98);
+    tl.to("#slider-value", { y: -18, duration: 0.2, ease: "power2.out" }, 3.0);
+    tl.to("#slider-value", { y: 0, duration: 0.2, ease: "power2.in" }, 3.2);
+    tl.set("#slider-value", { textContent: "45%" }, 3.18);
+    tl.fromTo(
+      "#result-card",
+      { opacity: 0, y: 55, scale: 0.96 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.45, ease: "back.out(1.3)" },
+      3.55,
+    );
+    tl.fromTo(
+      ".statuses span",
+      { opacity: 0, x: 20 },
+      { opacity: 1, x: 0, duration: 0.2, stagger: 0.11 },
+      3.85,
+    );
+    tl.to("#cursor", { x: -252, y: -115, opacity: 0.72, duration: 0.45 }, 4.15);
+    tl.to(".ui-noise", { backgroundPosition: "48px 96px", duration: 8, ease: "none" }, 0);
+    tl.to(
+      "#ui-world",
+      { scale: 1.16, filter: "blur(20px)", opacity: 0, duration: 0.48, ease: "power3.in" },
+      7.4,
+    );
+    tl.set("#ui-world", { opacity: 0, visibility: "hidden" }, 7.9);
+
+    window.__timelines["beat-5-ui"] = tl;
+    tl.seek(0);
+  </script>
+</template>

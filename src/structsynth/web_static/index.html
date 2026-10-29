@@ -1,0 +1,354 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta
+      name="description"
+      content="StructSynth 谱语义模板与同类题生成实验台"
+    />
+    <title>StructSynth · 同类题生成实验台</title>
+    <link rel="stylesheet" href="/assets/styles.css" />
+  </head>
+  <body>
+    <div class="page-grain" aria-hidden="true"></div>
+    <header class="topbar">
+      <a class="brand" href="/" aria-label="StructSynth 首页">
+        <span class="brand-mark" aria-hidden="true">
+          <i></i><i></i><i></i><i></i>
+        </span>
+        <span>
+          <strong>StructSynth</strong>
+          <small>同类题生成实验台</small>
+        </span>
+      </a>
+      <div class="topbar-meta">
+        <span class="local-pill"><i></i> 本地运行</span>
+        <span class="version">Depth-first / v0.3</span>
+      </div>
+    </header>
+
+    <main class="shell">
+      <aside class="config-panel">
+        <div class="config-heading">
+          <div>
+            <span class="eyebrow">Experiment setup</span>
+            <h1>设定实验</h1>
+          </div>
+          <span class="step-counter" id="seed-count">0 题</span>
+        </div>
+
+        <section class="config-section">
+          <div class="section-title">
+            <label for="seeds-input">种子题目</label>
+            <span>每行一道</span>
+          </div>
+          <textarea
+            id="seeds-input"
+            spellcheck="false"
+            placeholder="已知函数 f(x)=...，求...&#10;设 g(x)=...，判断..."
+          ></textarea>
+          <div class="input-actions">
+            <button class="text-button" id="load-example" type="button">
+              载入示例
+            </button>
+            <button class="text-button" id="import-json" type="button">
+              导入 JSON
+            </button>
+            <button class="text-button muted" id="clear-seeds" type="button">
+              清空
+            </button>
+            <input
+              id="json-file"
+              type="file"
+              accept=".json,application/json"
+              hidden
+            />
+          </div>
+          <p class="field-hint" id="seed-hint">
+            建议先用 20–50 道确实同类的题。
+          </p>
+        </section>
+
+        <section class="config-section">
+          <div class="section-title">
+            <span>运行模式</span>
+            <button
+              class="info-dot"
+              type="button"
+              title="Mock 模式只检查数据流，不能用于判断生成质量。"
+            >
+              i
+            </button>
+          </div>
+          <div class="segmented" id="provider-switch">
+            <button class="active" type="button" data-provider="mock">
+              <span class="segment-icon">◌</span>
+              离线演示
+            </button>
+            <button type="button" data-provider="openai">
+              <span class="segment-icon">↗</span>
+              DeepSeek / API
+            </button>
+          </div>
+          <div class="api-fields" id="api-fields" hidden>
+            <div class="api-group">
+              <div class="api-group-head">
+                <span>聊天接口 / 生成</span>
+                <button class="preset-button" id="deepseek-preset" type="button">
+                  DeepSeek 预设
+                </button>
+              </div>
+              <label class="field">
+                <span>Chat Base URL</span>
+                <input
+                  id="chat-base-url"
+                  type="url"
+                  placeholder="https://api.deepseek.com"
+                />
+              </label>
+              <label class="field">
+                <span>Chat API Key</span>
+                <input
+                  id="chat-api-key"
+                  type="password"
+                  autocomplete="off"
+                  placeholder="留空则读取环境变量"
+                />
+              </label>
+              <label class="field">
+                <span>Chat Model</span>
+                <input
+                  id="chat-model"
+                  type="text"
+                  placeholder="deepseek-flash"
+                />
+              </label>
+              <p class="field-hint" id="chat-env-status"></p>
+            </div>
+            <div class="api-group">
+              <div class="api-group-head">
+                <span>嵌入接口 / 编码</span>
+                <span class="api-required">必需</span>
+              </div>
+              <label class="field">
+                <span>Embedding Base URL</span>
+                <input
+                  id="embedding-base-url"
+                  type="url"
+                  placeholder="https://api.openai.com/v1"
+                />
+              </label>
+              <label class="field">
+                <span>Embedding API Key</span>
+                <input
+                  id="embedding-api-key"
+                  type="password"
+                  autocomplete="off"
+                  placeholder="留空则读取环境变量"
+                />
+              </label>
+              <label class="field">
+                <span>Embedding Model</span>
+                <input
+                  id="embedding-model"
+                  type="text"
+                  placeholder="text-embedding-3-small"
+                />
+              </label>
+              <p class="field-hint" id="embedding-env-status"></p>
+            </div>
+            <p class="api-note">
+              DeepSeek 负责聊天生成；还需要一个兼容
+              <code>/embeddings</code> 的服务来编码语段。
+            </p>
+          </div>
+        </section>
+
+        <details class="config-section advanced" open>
+          <summary>
+            <span>谱参数与生成参数</span>
+            <span class="summary-rule"></span>
+          </summary>
+          <div class="parameter-grid">
+            <label class="range-field">
+              <span>特征向量 k</span>
+              <output for="components">8</output>
+              <input
+                id="components"
+                type="range"
+                min="2"
+                max="20"
+                value="8"
+              />
+            </label>
+            <label class="range-field">
+              <span>候选单元簇</span>
+              <output for="clusters">8</output>
+              <input id="clusters" type="range" min="2" max="20" value="8" />
+            </label>
+            <label class="range-field">
+              <span>高激活分位点</span>
+              <output for="activation">80%</output>
+              <input
+                id="activation"
+                type="range"
+                min="50"
+                max="95"
+                value="80"
+              />
+            </label>
+            <label class="range-field">
+              <span>语段邻域比例</span>
+              <output for="neighbor-fraction">35%</output>
+              <input
+                id="neighbor-fraction"
+                type="range"
+                min="20"
+                max="70"
+                value="35"
+              />
+            </label>
+            <label class="range-field">
+              <span>每组生成数</span>
+              <output for="count">8</output>
+              <input id="count" type="range" min="3" max="20" value="8" />
+            </label>
+            <label class="range-field full">
+              <span>采样温度</span>
+              <output for="temperature">0.80</output>
+              <input
+                id="temperature"
+                type="range"
+                min="0"
+                max="1.5"
+                step="0.05"
+                value="0.8"
+              />
+            </label>
+          </div>
+        </details>
+
+        <button class="run-button" id="run-button" type="button">
+          <span>开始生成同类题</span>
+          <span class="run-arrow">↗</span>
+        </button>
+        <p class="privacy-note">
+          密钥仅发送到本机后台，不写入日志或结果文件。
+        </p>
+      </aside>
+
+      <section class="workspace">
+        <div class="workspace-empty" id="empty-state">
+          <div class="hero-copy">
+            <span class="eyebrow">From questions to structure</span>
+            <h2>不只改写题目，<br />先找到它们<span>为什么同类。</span></h2>
+            <p>
+              用语段相似度构造对比矩阵，从谱结构里提取跨题复现的语义槽位，
+              再让冻结模型沿这些槽位生成新题。
+            </p>
+          </div>
+          <div class="pipeline-preview">
+            <div class="pipeline-line" aria-hidden="true"></div>
+            <article style="--i: 0">
+              <span>01</span>
+              <strong>切分</strong>
+              <small>种子题 → 有序语段</small>
+            </article>
+            <article style="--i: 1">
+              <span>02</span>
+              <strong>对比</strong>
+              <small>M / N → 谱矩阵 A</small>
+            </article>
+            <article style="--i: 2">
+              <span>03</span>
+              <strong>聚类</strong>
+              <small>高激活语段 → V′</small>
+            </article>
+            <article style="--i: 3">
+              <span>04</span>
+              <strong>归纳</strong>
+              <small>候选单元 → 模板槽位</small>
+            </article>
+            <article style="--i: 4">
+              <span>05</span>
+              <strong>生成</strong>
+              <small>冻结模型 → 新题</small>
+            </article>
+            <article style="--i: 5">
+              <span>06</span>
+              <strong>评测</strong>
+              <small>三组 → 结构与多样性</small>
+            </article>
+          </div>
+          <div class="empty-footer">
+            <span><i class="signal-dot"></i> 当前为空任务</span>
+            <span>在左侧填入题目后开始</span>
+          </div>
+        </div>
+
+        <div class="run-state" id="running-state" hidden>
+          <div class="run-state-head">
+            <div>
+              <span class="eyebrow">Experiment in progress</span>
+              <h2>正在构造语义结构</h2>
+              <p id="running-message">准备实验环境...</p>
+            </div>
+            <div class="progress-orbit" id="progress-orbit">
+              <svg viewBox="0 0 120 120" aria-hidden="true">
+                <circle class="orbit-track" cx="60" cy="60" r="52"></circle>
+                <circle
+                  class="orbit-value"
+                  id="progress-circle"
+                  cx="60"
+                  cy="60"
+                  r="52"
+                ></circle>
+              </svg>
+              <strong id="progress-value">0%</strong>
+            </div>
+          </div>
+          <div class="progress-bar"><i id="progress-bar-fill"></i></div>
+          <div class="run-timeline" id="run-timeline"></div>
+          <div class="log-panel">
+            <div class="log-head">
+              <span>运行日志</span>
+              <span class="live-label"><i></i> LIVE</span>
+            </div>
+            <div class="log-lines" id="log-lines"></div>
+          </div>
+        </div>
+
+        <div class="results" id="results" hidden>
+          <div class="results-head">
+            <div>
+              <span class="eyebrow">Experiment report</span>
+              <h2>结构生成结果</h2>
+              <p id="result-meta"></p>
+            </div>
+            <div class="result-actions">
+              <a class="secondary-button" id="download-report" href="#">
+                下载报告
+              </a>
+              <a class="primary-small" id="download-archive" href="#">
+                导出全部结果
+              </a>
+            </div>
+          </div>
+          <nav class="result-tabs" id="result-tabs" aria-label="结果模块">
+            <button class="active" type="button" data-tab="overview">总览</button>
+            <button type="button" data-tab="segments">语段</button>
+            <button type="button" data-tab="spectral">谱结构</button>
+            <button type="button" data-tab="templates">模板槽位</button>
+            <button type="button" data-tab="generations">生成题</button>
+            <button type="button" data-tab="evaluation">评测明细</button>
+          </nav>
+          <div class="tab-content" id="tab-content"></div>
+        </div>
+      </section>
+    </main>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <script src="/assets/app.js"></script>
+  </body>
+</html>

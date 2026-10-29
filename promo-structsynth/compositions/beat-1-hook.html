@@ -1,0 +1,348 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "HF Song";
+      src: local("Songti SC"), local("STSong");
+      font-weight: 400 700;
+    }
+    @font-face {
+      font-family: "HF Sans";
+      src: local("PingFang SC"), local("Hiragino Sans GB");
+      font-weight: 300 700;
+    }
+    @font-face {
+      font-family: "HF Math";
+      src: local("Times New Roman"), local("STIX Two Text");
+      font-weight: 400 700;
+    }
+    @font-face {
+      font-family: "HF Mono";
+      src: local("Menlo"), local("SFMono-Regular");
+      font-weight: 400 700;
+    }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      color: #f2f0e9;
+      background: #123e37;
+    }
+
+    #hook-world {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .hook-glow {
+      position: absolute;
+      top: 180px;
+      left: 85px;
+      width: 900px;
+      height: 980px;
+      border-radius: 50%;
+      background: radial-gradient(
+        circle,
+        rgba(185, 214, 202, 0.24),
+        rgba(185, 214, 202, 0.045) 50%,
+        transparent 72%
+      );
+    }
+
+    .hook-grid {
+      position: absolute;
+      inset: 0;
+      opacity: 0.33;
+      background-image:
+        radial-gradient(circle at center, #b9d6ca 1.5px, transparent 2px),
+        linear-gradient(rgba(185, 214, 202, 0.1) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(185, 214, 202, 0.1) 1px, transparent 1px);
+      background-size: 92px 92px, 92px 92px, 92px 92px;
+    }
+
+    .hook-brand {
+      position: absolute;
+      top: 184px;
+      left: 70px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-family: "HF Mono";
+      font-size: 21px;
+      letter-spacing: 0.11em;
+      color: #b9d6ca;
+    }
+
+    .hook-brand img {
+      width: 48px;
+      height: 48px;
+    }
+
+    .hook-label {
+      position: absolute;
+      top: 330px;
+      left: 70px;
+      color: #b9d6ca;
+      font-family: "HF Mono";
+      font-size: 19px;
+      letter-spacing: 0.13em;
+    }
+
+    .hook-line-one,
+    .hook-line-two {
+      position: absolute;
+      left: 66px;
+      width: 930px;
+      margin: 0;
+      font-family: "HF Song";
+      font-weight: 700;
+      line-height: 1.04;
+      letter-spacing: -0.065em;
+    }
+
+    .hook-line-one {
+      top: 390px;
+      color: #f2f0e9;
+      font-size: 120px;
+    }
+
+    .hook-line-two {
+      top: 535px;
+      color: #b9d6ca;
+      font-size: 120px;
+    }
+
+    .hook-line-two span {
+      color: #dc6a4d;
+      font-style: italic;
+    }
+
+    .equation-stage {
+      position: absolute;
+      top: 810px;
+      left: 70px;
+      width: 940px;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-top: 1px solid rgba(185, 214, 202, 0.25);
+      border-bottom: 1px solid rgba(185, 214, 202, 0.25);
+    }
+
+    .function-main {
+      position: relative;
+      color: #faf9f4;
+      font-family: "HF Math";
+      font-size: 172px;
+      line-height: 1;
+      letter-spacing: -0.05em;
+    }
+
+    .function-main .base-old,
+    .function-main .base-new {
+      position: absolute;
+      left: 160px;
+      top: 67px;
+    }
+
+    .function-main .base-old {
+      color: #b9d6ca;
+    }
+
+    .function-main .base-new {
+      color: #dc6a4d;
+      opacity: 0;
+    }
+
+    .function-main .exponent {
+      margin-left: 8px;
+      font-size: 89px;
+      vertical-align: top;
+    }
+
+    .equation-caption {
+      position: absolute;
+      bottom: 29px;
+      left: 0;
+      right: 0;
+      color: #b9d6ca;
+      font-family: "HF Mono";
+      font-size: 20px;
+      letter-spacing: 0.08em;
+      text-align: center;
+    }
+
+    .node-field {
+      position: absolute;
+      left: 70px;
+      top: 1240px;
+      width: 940px;
+      height: 260px;
+      opacity: 0.8;
+    }
+
+    .hook-trace {
+      position: absolute;
+      left: 70px;
+      right: 70px;
+      bottom: 174px;
+      display: flex;
+      justify-content: space-between;
+      color: rgba(185, 214, 202, 0.6);
+      font-family: "HF Mono";
+      font-size: 17px;
+      letter-spacing: 0.08em;
+    }
+  </style>
+
+  <div data-hf-id="hf-wls7"
+    id="root"
+    data-composition-id="beat-1-hook"
+    data-start="0"
+    data-duration="4"
+    data-width="1080"
+    data-height="1920"
+  >
+    <div data-hf-id="hf-6ufm"
+      id="hook-stage"
+      class="clip"
+      data-start="0"
+      data-duration="4"
+      data-track-index="0"
+      style="position: absolute; inset: 0"
+    >
+      <div data-hf-id="hf-m073" id="hook-world">
+        <div data-hf-id="hf-zlz6" class="hook-grid"></div>
+        <div data-hf-id="hf-mh9l" class="hook-glow"></div>
+        <div data-hf-id="hf-gmuc" class="hook-brand">
+          <img
+            id="hook-brand-mark"
+            data-hf-id="hf-jj3d"
+            class="clip"
+            src="assets/brand/mark.svg"
+            alt=""
+            data-start="0"
+            data-duration="4"
+            data-track-index="1"
+          />
+          STRUCTSYNTH / SPECTRAL SEMANTICS
+        </div>
+        <div data-hf-id="hf-o0k2" class="hook-label">SAME SKELETON. NEW SURFACE.</div>
+
+        <h1 data-hf-id="hf-snvt" id="hook-line-one" class="hook-line-one">换掉题面。</h1>
+        <h2 data-hf-id="hf-7xn1" id="hook-line-two" class="hook-line-two">保留<span data-hf-id="hf-e8bq">思维。</span></h2>
+
+        <div data-hf-id="hf-sezm" id="equation-stage" class="equation-stage">
+          <div data-hf-id="hf-97hi" class="function-main">
+            f(x)=
+            <span data-hf-id="hf-8awo" class="base-old">2</span>
+            <span data-hf-id="hf-rer4" class="base-new">3</span>
+            <span data-hf-id="hf-3ycs" class="exponent">x</span>
+          </div>
+          <div data-hf-id="hf-v499" class="equation-caption">SURFACE CHANGES → STRUCTURE PERSISTS</div>
+        </div>
+
+        <svg data-hf-id="hf-0th8"
+          id="node-field"
+          class="node-field"
+          viewBox="0 0 940 260"
+          fill="none"
+          aria-hidden="true"
+        >
+          <g data-hf-id="hf-g13i" id="hook-nodes">
+            <path data-hf-id="hf-s1la" d="M95 130H255M255 130L410 60M255 130L410 198M410 60L590 130M410 198L590 130M590 130H820" stroke="#B9D6CA" stroke-width="2" opacity=".54"/>
+            <path data-hf-id="hf-7m2a" d="M95 130V48M95 130V216M820 130V52M820 130V220" stroke="#C89A45" stroke-width="1.5" stroke-dasharray="6 9" opacity=".55"/>
+            <circle data-hf-id="hf-oduz" cx="95" cy="130" r="13" fill="#DC6A4D"/>
+            <circle data-hf-id="hf-gfut" cx="255" cy="130" r="18" fill="#B9D6CA"/>
+            <circle data-hf-id="hf-36i6" cx="410" cy="60" r="16" fill="#1D6557" stroke="#B9D6CA" stroke-width="2"/>
+            <circle data-hf-id="hf-7nv6" cx="410" cy="198" r="16" fill="#1D6557" stroke="#B9D6CA" stroke-width="2"/>
+            <circle data-hf-id="hf-xxq2" cx="590" cy="130" r="20" fill="#B9D6CA"/>
+            <circle data-hf-id="hf-pep7" cx="820" cy="130" r="13" fill="#DC6A4D"/>
+            <text data-hf-id="hf-7p5v" x="255" y="100" fill="#F2F0E9" font-family="HF Sans" font-size="23" text-anchor="middle">条件</text>
+            <text data-hf-id="hf-ql83" x="410" y="35" fill="#F2F0E9" font-family="HF Sans" font-size="23" text-anchor="middle">操作</text>
+            <text data-hf-id="hf-44sy" x="410" y="238" fill="#F2F0E9" font-family="HF Sans" font-size="23" text-anchor="middle">约束</text>
+            <text data-hf-id="hf-9ej5" x="590" y="100" fill="#F2F0E9" font-family="HF Sans" font-size="23" text-anchor="middle">证明</text>
+          </g>
+        </svg>
+
+        <div data-hf-id="hf-72kp" class="hook-trace">
+          <span data-hf-id="hf-jj8m">2ˣ → 3ˣ</span>
+          <span data-hf-id="hf-hmqx">D(x₀) → D(x₀)</span>
+          <span data-hf-id="hf-n23o">PROOF DEPTH → SAME</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+
+    tl.fromTo(
+      "#hook-world",
+      { opacity: 0, scale: 1.07, filter: "blur(16px)" },
+      { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.34, ease: "expo.out" },
+      0,
+    );
+    tl.fromTo(
+      "#hook-line-one",
+      { opacity: 0, x: -100, skewX: -2 },
+      { opacity: 1, x: 0, skewX: 0, duration: 0.38, ease: "power4.out" },
+      0.1,
+    );
+    tl.fromTo(
+      "#hook-line-two",
+      { opacity: 0, x: 90 },
+      { opacity: 1, x: 0, duration: 0.4, ease: "power4.out" },
+      0.35,
+    );
+    tl.fromTo(
+      "#equation-stage",
+      { opacity: 0, y: 75, scale: 0.96 },
+      { opacity: 1, y: 0, scale: 1, duration: 0.48, ease: "expo.out" },
+      0.62,
+    );
+    tl.fromTo(
+      ".base-old",
+      { opacity: 1, scale: 1 },
+      { opacity: 0, scale: 0.45, duration: 0.2, ease: "power3.in" },
+      2.02,
+    );
+    tl.fromTo(
+      ".base-new",
+      { opacity: 0, scale: 1.9 },
+      { opacity: 1, scale: 1, duration: 0.24, ease: "back.out(1.8)" },
+      2.05,
+    );
+    tl.fromTo(
+      "#node-field",
+      { opacity: 0, y: 30 },
+      { opacity: 0.8, y: 0, duration: 0.42 },
+      1.25,
+    );
+    tl.fromTo(
+      "#hook-nodes circle",
+      { opacity: 0, scale: 0.1, transformOrigin: "center" },
+      { opacity: 1, scale: 1, duration: 0.2, stagger: 0.08, ease: "back.out(1.8)" },
+      1.38,
+    );
+    tl.fromTo(
+      "#hook-nodes path",
+      { opacity: 0 },
+      { opacity: 0.64, duration: 0.45, stagger: 0.1 },
+      1.62,
+    );
+    tl.to(".hook-grid", { backgroundPosition: "92px 92px", duration: 4, ease: "none" }, 0);
+    tl.to("#hook-nodes", { x: 12, duration: 4, ease: "sine.inOut" }, 0);
+    tl.to(
+      "#hook-world",
+      { scale: 1.11, filter: "blur(18px)", opacity: 0, duration: 0.28, ease: "power3.in" },
+      3.72,
+    );
+    tl.set("#hook-world", { opacity: 0, visibility: "hidden" }, 3.99);
+
+    window.__timelines["beat-1-hook"] = tl;
+    tl.seek(0);
+  </script>
+</template>

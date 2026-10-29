@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>StructSynth — 同类题，不复制题面</title>
+    <script src="assets/vendor/gsap.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #123e37;
+      }
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+      }
+      .scene {
+        position: absolute;
+        inset: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div data-hf-id="hf-sj62"
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="45"
+      data-width="1080"
+      data-height="1920"
+      data-motion-blur="on"
+    >
+      <div data-hf-id="hf-kosg"
+        id="scene-hook"
+        class="scene"
+        data-composition-id="beat-1-hook"
+        data-composition-src="compositions/beat-1-hook.html"
+        data-start="0"
+        data-duration="4"
+        data-track-index="1"
+        data-track-kind="graphics"
+        data-width="1080"
+        data-height="1920"
+      ></div>
+
+      <div data-hf-id="hf-4vvn"
+        id="scene-function"
+        class="scene"
+        data-composition-id="beat-2-function"
+        data-composition-src="compositions/beat-2-function.html"
+        data-start="4"
+        data-duration="10"
+        data-track-index="2"
+        data-track-kind="graphics"
+        data-width="1080"
+        data-height="1920"
+      ></div>
+
+      <div data-hf-id="hf-sg6j"
+        id="scene-engine"
+        class="scene"
+        data-composition-id="beat-3-engine"
+        data-composition-src="compositions/beat-3-engine.html"
+        data-start="14"
+        data-duration="9"
+        data-track-index="3"
+        data-track-kind="graphics"
+        data-width="1080"
+        data-height="1920"
+      ></div>
+
+      <div data-hf-id="hf-0pkd"
+        id="scene-cmo"
+        class="scene"
+        data-composition-id="beat-4-cmo"
+        data-composition-src="compositions/beat-4-cmo.html"
+        data-start="23"
+        data-duration="9"
+        data-track-index="4"
+        data-track-kind="graphics"
+        data-width="1080"
+        data-height="1920"
+      ></div>
+
+      <div data-hf-id="hf-lsim"
+        id="scene-ui"
+        class="scene"
+        data-composition-id="beat-5-ui"
+        data-composition-src="compositions/beat-5-ui.html"
+        data-start="32"
+        data-duration="8"
+        data-track-index="5"
+        data-track-kind="graphics"
+        data-width="1080"
+        data-height="1920"
+      ></div>
+
+      <div data-hf-id="hf-ydww"
+        id="scene-payoff"
+        class="scene"
+        data-composition-id="beat-6-payoff"
+        data-composition-src="compositions/beat-6-payoff.html"
+        data-start="40"
+        data-duration="5"
+        data-track-index="6"
+        data-track-kind="graphics"
+        data-width="1080"
+        data-height="1920"
+      ></div>
+
+      <audio data-hf-id="hf-lsvs"
+        id="sfx-impact-open"
+        src="assets/sfx/impact-bass-1.mp3"
+        data-start="0"
+        data-duration="2.12"
+        data-track-index="20"
+        data-volume="0.34"
+      ></audio>
+      <audio data-hf-id="hf-wbeu"
+        id="sfx-glitch-function"
+        src="assets/sfx/glitch-1.mp3"
+        data-start="4"
+        data-duration="2.64"
+        data-track-index="21"
+        data-volume="0.23"
+      ></audio>
+      <audio data-hf-id="hf-j41l"
+        id="sfx-riser-cmo"
+        src="assets/sfx/riser.mp3"
+        data-start="13.9"
+        data-duration="10.03"
+        data-track-index="22"
+        data-volume="0.34"
+      ></audio>
+      <audio data-hf-id="hf-yuo7"
+        id="sfx-impact-cmo"
+        src="assets/sfx/impact-bass-1.mp3"
+        data-start="23"
+        data-duration="2.12"
+        data-track-index="23"
+        data-volume="0.38"
+      ></audio>
+      <audio data-hf-id="hf-a1dz"
+        id="sfx-whoosh-ui"
+        src="assets/sfx/whoosh-cinematic.mp3"
+        data-start="27"
+        data-duration="5.54"
+        data-track-index="24"
+        data-volume="0.22"
+      ></audio>
+      <audio data-hf-id="hf-9nrt"
+        id="sfx-impact-close"
+        src="assets/sfx/impact-bass-1.mp3"
+        data-start="40"
+        data-duration="2.12"
+        data-track-index="25"
+        data-volume="0.34"
+      ></audio>
+    </div>
+    <script>
+      window.__timelines["main"] = gsap.timeline({ paused: true });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,372 @@
+<template>
+  <style>
+    @font-face {
+      font-family: "HF Song";
+      src: local("Songti SC"), local("STSong");
+      font-weight: 400 700;
+    }
+    @font-face {
+      font-family: "HF Sans";
+      src: local("PingFang SC"), local("Hiragino Sans GB");
+      font-weight: 300 700;
+    }
+    @font-face {
+      font-family: "HF Math";
+      src: local("Times New Roman"), local("STIX Two Text");
+      font-weight: 400 700;
+    }
+    @font-face {
+      font-family: "HF Mono";
+      src: local("Menlo"), local("SFMono-Regular");
+      font-weight: 400 700;
+    }
+
+    #root {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      color: #f2f0e9;
+      background: #0b251f;
+    }
+
+    #engine-world {
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+    }
+
+    .engine-aura {
+      position: absolute;
+      left: 56px;
+      top: 170px;
+      width: 960px;
+      height: 1160px;
+      background: radial-gradient(
+        ellipse at center,
+        rgba(29, 101, 87, 0.68) 0,
+        rgba(29, 101, 87, 0.2) 45%,
+        transparent 72%
+      );
+    }
+
+    .engine-kicker {
+      position: absolute;
+      top: 184px;
+      left: 68px;
+      color: #b9d6ca;
+      font-family: "HF Mono";
+      font-size: 19px;
+      letter-spacing: 0.11em;
+    }
+
+    .engine-title {
+      position: absolute;
+      top: 224px;
+      left: 66px;
+      width: 900px;
+      margin: 0;
+      font-family: "HF Song";
+      font-size: 64px;
+      font-weight: 700;
+      line-height: 1.18;
+      letter-spacing: -0.045em;
+    }
+
+    .engine-title span {
+      color: #b9d6ca;
+    }
+
+    .network {
+      position: absolute;
+      left: 36px;
+      top: 370px;
+      width: 1008px;
+      height: 630px;
+    }
+
+    .network path {
+      fill: none;
+      stroke-linecap: round;
+    }
+
+    .network .semantic {
+      stroke: rgba(185, 214, 202, 0.65);
+      stroke-width: 2.2;
+    }
+
+    .network .role {
+      stroke: rgba(200, 154, 69, 0.56);
+      stroke-width: 1.6;
+      stroke-dasharray: 5 9;
+    }
+
+    .network text {
+      fill: #f2f0e9;
+      font-family: "HF Sans";
+      font-size: 22px;
+      text-anchor: middle;
+    }
+
+    .network .node {
+      transform-box: fill-box;
+      transform-origin: center;
+    }
+
+    .formula-chip {
+      position: absolute;
+      left: 66px;
+      top: 1010px;
+      width: 948px;
+      padding: 25px 30px;
+      border-top: 1px solid rgba(185, 214, 202, 0.34);
+      border-bottom: 1px solid rgba(185, 214, 202, 0.34);
+      font-family: "HF Math";
+      font-size: 39px;
+      text-align: center;
+    }
+
+    .formula-chip small {
+      display: block;
+      margin-top: 10px;
+      color: #b9d6ca;
+      font-family: "HF Mono";
+      font-size: 17px;
+      letter-spacing: 0.08em;
+    }
+
+    .slot-rail {
+      position: absolute;
+      left: 66px;
+      right: 66px;
+      top: 1150px;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 9px;
+    }
+
+    .slot {
+      min-height: 125px;
+      padding: 15px 12px;
+      border: 1px solid rgba(185, 214, 202, 0.25);
+      border-radius: 7px;
+      background: rgba(18, 62, 55, 0.84);
+    }
+
+    .slot span {
+      display: block;
+      color: #c89a45;
+      font-family: "HF Mono";
+      font-size: 15px;
+    }
+
+    .slot strong {
+      display: block;
+      margin-top: 14px;
+      font-family: "HF Song";
+      font-size: 27px;
+      font-weight: 700;
+    }
+
+    .slot p {
+      margin: 7px 0 0;
+      color: #b9d6ca;
+      font-size: 17px;
+      line-height: 1.35;
+    }
+
+    .collapse-orbit {
+      position: absolute;
+      left: 490px;
+      top: 1150px;
+      width: 100px;
+      height: 100px;
+      border: 2px solid #dc6a4d;
+      border-radius: 50%;
+      opacity: 0;
+      box-shadow: 0 0 35px rgba(220, 106, 77, 0.7);
+    }
+
+    .engine-index {
+      position: absolute;
+      left: 68px;
+      right: 68px;
+      bottom: 162px;
+      display: flex;
+      justify-content: space-between;
+      color: rgba(185, 214, 202, 0.57);
+      font-family: "HF Mono";
+      font-size: 16px;
+      letter-spacing: 0.08em;
+    }
+  </style>
+
+  <div data-hf-id="hf-k2rz"
+    id="root"
+    data-composition-id="beat-3-engine"
+    data-start="0"
+    data-duration="9"
+    data-width="1080"
+    data-height="1920"
+  >
+    <div data-hf-id="hf-dzow"
+      id="engine-stage"
+      class="clip"
+      data-start="0"
+      data-duration="9"
+      data-track-index="0"
+      style="position: absolute; inset: 0"
+    >
+      <div data-hf-id="hf-8i54" id="engine-world">
+        <div data-hf-id="hf-h7sq" class="engine-aura"></div>
+        <div data-hf-id="hf-jnes" class="engine-kicker">02 / STRUCTURE ENGINE</div>
+        <h1 data-hf-id="hf-b0ti" id="engine-title" class="engine-title">
+          拆成<span data-hf-id="hf-mc77">语段</span>，再找跨题复现的<span data-hf-id="hf-gtup">角色</span>。
+        </h1>
+
+        <svg data-hf-id="hf-cwtf"
+          id="network"
+          class="network"
+          viewBox="0 0 1008 630"
+          fill="none"
+          aria-hidden="true"
+        >
+          <g data-hf-id="hf-uvyd" id="network-camera">
+            <g data-hf-id="hf-l4yq" class="role">
+              <path data-hf-id="hf-8ggn" d="M102 120L310 188L512 112L728 188L906 112"/>
+              <path data-hf-id="hf-lkyx" d="M102 490L310 430L512 520L728 434L906 508"/>
+              <path data-hf-id="hf-pxlz" d="M102 120L102 490M310 188L310 430M512 112L512 520M728 188L728 434M906 112L906 508"/>
+            </g>
+            <g data-hf-id="hf-5wvm" class="semantic">
+              <path data-hf-id="hf-4c5n" d="M102 120L212 310L310 188"/>
+              <path data-hf-id="hf-gw7s" d="M212 310L310 430L512 520"/>
+              <path data-hf-id="hf-rzgn" d="M212 310L388 312L512 112"/>
+              <path data-hf-id="hf-ir2y" d="M388 312L620 312L728 188"/>
+              <path data-hf-id="hf-hu59" d="M620 312L728 434L906 508"/>
+              <path data-hf-id="hf-uqlx" d="M620 312L512 520M388 312L512 520"/>
+              <path data-hf-id="hf-69a2" d="M728 434L906 112"/>
+            </g>
+            <g data-hf-id="hf-lx9q" id="nodes">
+              <circle data-hf-id="hf-mexb" class="node" cx="102" cy="120" r="16" fill="#DC6A4D"/>
+              <circle data-hf-id="hf-okrt" class="node" cx="310" cy="188" r="18" fill="#B9D6CA"/>
+              <circle data-hf-id="hf-7h0v" class="node" cx="512" cy="112" r="20" fill="#1D6557" stroke="#B9D6CA" stroke-width="2"/>
+              <circle data-hf-id="hf-gvvu" class="node" cx="728" cy="188" r="15" fill="#C89A45"/>
+              <circle data-hf-id="hf-o891" class="node" cx="906" cy="112" r="18" fill="#B9D6CA"/>
+              <circle data-hf-id="hf-rmrw" class="node" cx="212" cy="310" r="22" fill="#1D6557" stroke="#B9D6CA" stroke-width="2"/>
+              <circle data-hf-id="hf-0quf" class="node" cx="388" cy="312" r="15" fill="#C89A45"/>
+              <circle data-hf-id="hf-xudo" class="node" cx="620" cy="312" r="24" fill="#DC6A4D"/>
+              <circle data-hf-id="hf-dkh4" class="node" cx="102" cy="490" r="16" fill="#B9D6CA"/>
+              <circle data-hf-id="hf-iklr" class="node" cx="310" cy="430" r="18" fill="#1D6557" stroke="#B9D6CA" stroke-width="2"/>
+              <circle data-hf-id="hf-mw62" class="node" cx="512" cy="520" r="20" fill="#B9D6CA"/>
+              <circle data-hf-id="hf-xrbq" class="node" cx="728" cy="434" r="15" fill="#C89A45"/>
+              <circle data-hf-id="hf-yfyf" class="node" cx="906" cy="508" r="18" fill="#DC6A4D"/>
+            </g>
+            <g data-hf-id="hf-z6et" id="network-labels">
+              <text data-hf-id="hf-utv4" x="102" y="86">条件</text>
+              <text data-hf-id="hf-cuvn" x="310" y="153">对象</text>
+              <text data-hf-id="hf-sczf" x="512" y="77">操作</text>
+              <text data-hf-id="hf-zzmf" x="728" y="153">约束</text>
+              <text data-hf-id="hf-aybb" x="906" y="77">答案</text>
+              <text data-hf-id="hf-ih3z" x="212" y="353">目标</text>
+              <text data-hf-id="hf-m606" x="620" y="355">证明</text>
+              <text data-hf-id="hf-yvat" x="512" y="565">验证</text>
+            </g>
+          </g>
+        </svg>
+
+        <div data-hf-id="hf-f443" id="formula-chip" class="formula-chip">
+          A = 2 sym(M) − sym(N)
+          <small data-hf-id="hf-36uc">SEMANTIC LINKS + ROLE LINKS + LOCAL NEIGHBORS</small>
+        </div>
+
+        <section data-hf-id="hf-gz6d" class="slot-rail">
+          <div data-hf-id="hf-fv78" class="slot"><span data-hf-id="hf-1deg">S01 / INPUT</span><strong data-hf-id="hf-4xvp">条件</strong><p data-hf-id="hf-2dh5">对象与定义域</p></div>
+          <div data-hf-id="hf-exn0" class="slot"><span data-hf-id="hf-9yn2">S02 / MOVE</span><strong data-hf-id="hf-3cd7">操作</strong><p data-hf-id="hf-p9qh">转换与推导</p></div>
+          <div data-hf-id="hf-dqpx" class="slot"><span data-hf-id="hf-sobx">S03 / CONSTRAINT</span><strong data-hf-id="hf-mry9">约束</strong><p data-hf-id="hf-dlki">包含与不等式</p></div>
+          <div data-hf-id="hf-e50y" class="slot"><span data-hf-id="hf-0k3s">S04 / OUTPUT</span><strong data-hf-id="hf-f9l9">证明</strong><p data-hf-id="hf-b08j">结论与验证</p></div>
+        </section>
+
+        <div data-hf-id="hf-w8ki" id="collapse-orbit" class="collapse-orbit"></div>
+        <div data-hf-id="hf-jzq9" class="engine-index">
+          <span data-hf-id="hf-l50g">SEMANTIC + CATEGORICAL</span>
+          <span data-hf-id="hf-lu32">SPECTRAL FAMILY MATCH</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tl = gsap.timeline({ paused: true, defaults: { ease: "power3.out" } });
+
+    tl.fromTo(
+      "#engine-world",
+      { opacity: 0, scale: 1.04, filter: "blur(12px)" },
+      { opacity: 1, scale: 1, filter: "blur(0px)", duration: 0.4, ease: "expo.out" },
+      0,
+    );
+    tl.fromTo(
+      "#engine-title",
+      { opacity: 0, y: -48 },
+      { opacity: 1, y: 0, duration: 0.42 },
+      0.14,
+    );
+    tl.fromTo(
+      "#network",
+      { opacity: 0, y: 45 },
+      { opacity: 1, y: 0, duration: 0.45 },
+      0.48,
+    );
+    tl.fromTo(
+      "#nodes .node",
+      { opacity: 0, scale: 0.15 },
+      { opacity: 1, scale: 1, duration: 0.24, stagger: 0.055, ease: "back.out(1.6)" },
+      0.72,
+    );
+    tl.fromTo(
+      "#network .semantic path",
+      { strokeDasharray: 700, strokeDashoffset: 700 },
+      { strokeDashoffset: 0, duration: 0.58, stagger: 0.08, ease: "power2.inOut" },
+      1.22,
+    );
+    tl.fromTo(
+      "#network .role path",
+      { opacity: 0 },
+      { opacity: 1, duration: 0.38, stagger: 0.07 },
+      2.0,
+    );
+    tl.fromTo(
+      "#network-labels text",
+      { opacity: 0, y: 12 },
+      { opacity: 1, y: 0, duration: 0.22, stagger: 0.07 },
+      2.55,
+    );
+    tl.fromTo(
+      "#formula-chip",
+      { opacity: 0, scaleX: 0.35 },
+      { opacity: 1, scaleX: 1, duration: 0.5, ease: "expo.out" },
+      3.0,
+    );
+    tl.fromTo(
+      ".slot",
+      { opacity: 0, y: 38 },
+      { opacity: 1, y: 0, duration: 0.3, stagger: 0.12 },
+      3.55,
+    );
+    tl.fromTo(
+      "#collapse-orbit",
+      { opacity: 0, scale: 2.4 },
+      { opacity: 1, scale: 0.2, duration: 0.65, ease: "power3.in" },
+      6.6,
+    );
+    tl.to("#collapse-orbit", { opacity: 0, scale: 0, duration: 0.18 }, 7.25);
+    tl.to("#network-camera", { x: 28, y: -12, duration: 9, ease: "sine.inOut" }, 0);
+    tl.to(
+      "#engine-world",
+      { scale: 1.1, filter: "blur(18px)", opacity: 0, duration: 0.36, ease: "power3.in" },
+      8.58,
+    );
+    tl.set("#engine-world", { opacity: 0, visibility: "hidden" }, 8.96);
+
+    window.__timelines["beat-3-engine"] = tl;
+    tl.seek(0);
+  </script>
+</template>
